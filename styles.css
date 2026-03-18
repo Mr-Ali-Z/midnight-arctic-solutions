@@ -1071,6 +1071,28 @@ p  { color: var(--color-text-mid); line-height: 1.7; }
   background: var(--color-bg);
   color: var(--color-text-mid);
 }
+/* NPI Info Block */
+.npi-block {
+  background: var(--color-navy);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+.npi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+.npi-item { display: flex; flex-direction: column; gap: 4px; }
+.npi-label {
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.5);
+  font-weight: 600;
+}
+.npi-item strong { color: white; font-size: .9rem; }
+
 .cert-footer-note {
   display: flex; align-items: flex-start; gap: 12px;
   background: var(--color-blue-light);

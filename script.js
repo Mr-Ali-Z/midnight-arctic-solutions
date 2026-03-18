@@ -749,8 +749,8 @@ const BOT_RESPONSES = {
   'browse products':      'Great! You can explore our full catalog by clicking the <strong>Products</strong> tab in the navigation, or <a href="#products">click here</a>. Use the category filters to narrow down by type.',
   'request a quote':      'Requesting a quote is easy! Add the items you need to your Quote Cart using the <strong>"Add to Quote"</strong> button on any product, then click the cart icon to submit your request. No payment needed.',
   'do you accept medicare': 'Yes! Midnight Arctic Solutions LLC is enrolled as an authorized DMEPOS supplier. We work with Medicare and Medicaid. Contact us with your information and we\'ll verify coverage eligibility for the specific equipment.',
-  'contact team':         'You can reach us by:<br>📞 <strong>(555) 000-0000</strong><br>📧 <a href="mailto:info@midnightarcticsolutions.com">info@midnightarcticsolutions.com</a><br><br>Or use the <a href="#contact">Contact form</a> on this page.',
-  default:                'Thanks for your message! A team member will respond to detailed inquiries within 1 business day. For immediate help, please call <strong>(555) 000-0000</strong> or use our <a href="#contact">Contact form</a>.',
+  'contact team':         'You can reach us by:<br>📞 <strong>(601) 521-9329</strong><br>📧 <a href="mailto:info@midnightarcticsolutions.com">info@midnightarcticsolutions.com</a><br>📍 5500 Mianeh St, Unit D, Mission, TX 78574<br><br>Or use the <a href="#contact">Contact form</a> on this page.',
+  default:                'Thanks for your message! A team member will respond to detailed inquiries within 1 business day. For immediate help, please call <strong>(601) 521-9329</strong> or use our <a href="#contact">Contact form</a>.',
 };
 
 function addChatMessage(text, isUser = false) {
