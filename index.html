@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Midnight Arctic Solutions LLC — Trusted DME supplier and distributor. Browse quality durable medical equipment and submit quote requests for your healthcare facility or personal needs." />
+  <meta name="keywords" content="DME supplier, durable medical equipment, wheelchair, walker, hospital bed, medical equipment distributor" />
+  <title>Midnight Arctic Solutions LLC | DME Supplier &amp; Distributor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     TOAST NOTIFICATION
+     ============================================================ -->
+<div id="toast" class="toast" aria-live="polite"></div>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<header class="site-header" id="siteHeader">
+  <nav class="nav-container">
+    <a href="#home" class="nav-logo" aria-label="Midnight Arctic Solutions Home">
+      <div class="logo-mark">
+        <i class="fa-solid fa-snowflake"></i>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Midnight Arctic</span>
+        <span class="logo-tagline">Solutions LLC</span>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+      <li><a href="#products" class="nav-link" data-section="products">Products</a></li>
+      <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+      <li><a href="#certifications" class="nav-link" data-section="certifications">Certifications</a></li>
+      <li><a href="#faq" class="nav-link" data-section="faq">FAQ</a></li>
+      <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="cart-btn" id="cartBtn" aria-label="Open quote cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-count" id="cartCount">0</span>
+        <span class="cart-label">Quote Cart</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+     CART PANEL (SLIDE-OUT)
+     ============================================================ -->
+<div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+<aside class="cart-panel" id="cartPanel" aria-label="Quote cart">
+  <div class="cart-header">
+    <h2><i class="fa-solid fa-file-invoice"></i> Quote Request Cart</h2>
+    <button class="cart-close" id="cartClose" aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div class="cart-notice">
+    <i class="fa-solid fa-circle-info"></i>
+    <span>No payment required — this cart collects items for a custom quote only.</span>
+  </div>
+
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <i class="fa-solid fa-box-open"></i>
+      <p>Your quote cart is empty.</p>
+      <p>Browse our products and click <strong>Add to Quote</strong> to get started.</p>
+    </div>
+  </div>
+
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-summary">
+      <span>Items selected:</span>
+      <strong id="cartTotalItems">0</strong>
+    </div>
+    <button class="btn btn-primary btn-block" id="proceedQuoteBtn">
+      <i class="fa-solid fa-paper-plane"></i> Proceed to Quote Request
+    </button>
+    <button class="btn btn-outline btn-block btn-sm" id="clearCartBtn">
+      <i class="fa-solid fa-trash-can"></i> Clear Cart
+    </button>
+  </div>
+</aside>
+
+<!-- ============================================================
+     QUOTE REQUEST FORM MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="quoteModalOverlay" aria-hidden="true"></div>
+<div class="modal quote-modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle">
+  <div class="modal-header">
+    <h2 id="quoteModalTitle"><i class="fa-solid fa-file-contract"></i> Request a Quote</h2>
+    <button class="modal-close" id="quoteModalClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="quote-items-summary" id="quoteItemsSummary"></div>
+    <form id="quoteForm" novalidate>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="qFirstName">First Name <span class="req">*</span></label>
+          <input type="text" id="qFirstName" name="firstName" placeholder="John" required />
+          <span class="field-error" id="qFirstNameErr"></span>
+        </div>
+        <div class="form-group">
+          <label for="qLastName">Last Name <span class="req">*</span></label>
+          <input type="text" id="qLastName" name="lastName" placeholder="Smith" required />
+          <span class="field-error" id="qLastNameErr"></span>
+        </div>
+        <div class="form-group">
+          <label for="qEmail">Email Address <span class="req">*</span></label>
+          <input type="email" id="qEmail" name="email" placeholder="john@example.com" required />
+          <span class="field-error" id="qEmailErr"></span>
+        </div>
+        <div class="form-group">
+          <label for="qPhone">Phone Number <span class="req">*</span></label>
+          <input type="tel" id="qPhone" name="phone" placeholder="(555) 000-0000" required />
+          <span class="field-error" id="qPhoneErr"></span>
+        </div>
+        <div class="form-group form-group--full">
+          <label for="qCompany">Organization / Company</label>
+          <input type="text" id="qCompany" name="company" placeholder="Healthcare Facility or Individual" />
+        </div>
+        <div class="form-group form-group--full">
+          <label for="qNotes">Additional Notes / Special Requirements</label>
+          <textarea id="qNotes" name="notes" rows="4" placeholder="Describe any specific requirements, quantities, delivery preferences, etc."></textarea>
+        </div>
+      </div>
+      <div class="quote-disclaimer">
+        <i class="fa-solid fa-lock"></i>
+        <span>Your information is secure. A representative will contact you within 1–2 business days with your custom quote. <strong>No payment is required at this stage.</strong></span>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitQuoteBtn">
+        <i class="fa-solid fa-paper-plane"></i> Submit Quote Request
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     PRODUCT DETAIL MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="productModalOverlay" aria-hidden="true"></div>
+<div class="modal product-modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+  <div class="modal-header">
+    <h2 id="productModalTitle">Product Details</h2>
+    <button class="modal-close" id="productModalClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="modal-body" id="productModalBody"></div>
+</div>
+
+<!-- ============================================================
+     QUOTE SUCCESS MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="successModalOverlay" aria-hidden="true"></div>
+<div class="modal success-modal" id="successModal" role="dialog" aria-modal="true">
+  <div class="modal-body success-body">
+    <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h2>Quote Request Submitted!</h2>
+    <p>Thank you for your interest in Midnight Arctic Solutions LLC. A member of our team will review your request and contact you within <strong>1–2 business days</strong>.</p>
+    <p class="success-sub">Check your email for a confirmation. If you have urgent needs, call us directly.</p>
+    <button class="btn btn-primary" id="successModalClose">Back to Products</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main id="mainContent">
+
+  <!-- ==================== SECTION: HOME ==================== -->
+  <section id="home" class="section-home">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content container">
+        <div class="hero-badge">
+          <i class="fa-solid fa-shield-halved"></i> Licensed &amp; Insured DME Distributor
+        </div>
+        <h1 class="hero-headline">Trusted DME Solutions,<br /><span class="accent-text">Delivered with Care</span></h1>
+        <p class="hero-sub">Midnight Arctic Solutions LLC supplies healthcare professionals and patients with quality durable medical equipment — backed by certified service, transparent pricing, and fast fulfillment.</p>
+        <div class="hero-actions">
+          <a href="#products" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-box-open"></i> Browse Products
+          </a>
+          <a href="#contact" class="btn btn-outline-light btn-lg">
+            <i class="fa-solid fa-phone"></i> Contact Us
+          </a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item"><i class="fa-solid fa-check-circle"></i> HCPCS Coded Products</div>
+          <div class="trust-item"><i class="fa-solid fa-check-circle"></i> Medicare / Medicaid Accepted</div>
+          <div class="trust-item"><i class="fa-solid fa-check-circle"></i> No Online Payment Required</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="container stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" data-target="30">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">Products Available</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="5">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">Years in Business</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="500">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">Clients Served</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="48">0</span><span class="stat-suffix">hr</span>
+          <span class="stat-label">Quote Turnaround</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHY CHOOSE US -->
+    <div class="why-us section-padding">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Why Choose Us</span>
+          <h2>Quality You Can Count On</h2>
+          <p>We combine industry expertise with a patient-first approach to deliver the right equipment at the right time.</p>
+        </div>
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-certificate"></i></div>
+            <h3>Fully Licensed &amp; Certified</h3>
+            <p>All required state and federal licensing maintained. Compliant with Medicare/Medicaid billing standards and DMEPOS supplier regulations.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <h3>Fast Fulfillment</h3>
+            <p>Responsive order processing and delivery coordination. We work with your timeline — from single units to larger facility orders.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-headset"></i></div>
+            <h3>Dedicated Support</h3>
+            <p>Speak directly with a knowledgeable representative. We guide you from product selection through delivery and setup assistance.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon"><i class="fa-solid fa-tags"></i></div>
+            <h3>Custom Quotes</h3>
+            <p>No hidden pricing. Request a quote for any combination of products and receive a transparent, itemized response within 1–2 business days.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="how-it-works section-padding bg-light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Simple Process</span>
+          <h2>How Quote Requests Work</h2>
+          <p>Getting the equipment you need is easy. No account required. No payment upfront.</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h3>Browse the Catalog</h3>
+              <p>Explore our full range of DME products. Filter by category and view detailed product information.</p>
+            </div>
+          </div>
+          <div class="step-connector"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h3>Add to Quote Cart</h3>
+              <p>Click <em>Add to Quote</em> on any product. Build your list — add as many items as you need.</p>
+            </div>
+          </div>
+          <div class="step-connector"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="step">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h3>Submit &amp; Receive Your Quote</h3>
+              <p>Fill in your contact details and submit. A representative will follow up with pricing and availability within 48 hours.</p>
+            </div>
+          </div>
+        </div>
+        <div class="steps-cta">
+          <a href="#products" class="btn btn-primary">Start Browsing <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURED PRODUCTS -->
+    <div class="featured-products section-padding">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Our Products</span>
+          <h2>Featured Equipment</h2>
+          <p>A selection of our most requested DME items. View the full catalog for all available products.</p>
+        </div>
+        <div class="product-grid" id="featuredProductGrid"></div>
+        <div class="featured-cta">
+          <a href="#products" class="btn btn-primary">View Full Catalog <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATIONS PREVIEW -->
+    <div class="cert-preview section-padding bg-navy">
+      <div class="container">
+        <div class="section-header section-header--light">
+          <span class="section-eyebrow section-eyebrow--light">Compliance &amp; Credentials</span>
+          <h2>Licensed, Certified &amp; Compliant</h2>
+          <p>Midnight Arctic Solutions LLC maintains all required certifications for DME distribution.</p>
+        </div>
+        <div class="cert-badges">
+          <div class="cert-badge">
+            <i class="fa-solid fa-id-card"></i>
+            <span>DMEPOS Supplier</span>
+          </div>
+          <div class="cert-badge">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>State Licensed</span>
+          </div>
+          <div class="cert-badge">
+            <i class="fa-solid fa-notes-medical"></i>
+            <span>Medicare / Medicaid</span>
+          </div>
+          <div class="cert-badge">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Fully Insured</span>
+          </div>
+          <div class="cert-badge">
+            <i class="fa-solid fa-building"></i>
+            <span>LLC Registered</span>
+          </div>
+          <div class="cert-badge">
+            <i class="fa-solid fa-file-contract"></i>
+            <span>HIPAA Aware</span>
+          </div>
+        </div>
+        <div class="cert-preview-cta">
+          <a href="#certifications" class="btn btn-outline-light">View Full Credentials <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA BAND -->
+    <div class="cta-band section-padding">
+      <div class="container cta-inner">
+        <div class="cta-text">
+          <h2>Ready to Get Started?</h2>
+          <p>Browse our catalog, build your quote cart, and submit your request today. No payment required.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="#products" class="btn btn-primary btn-lg">Browse Products</a>
+          <a href="#contact" class="btn btn-outline btn-lg">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- END SECTION: HOME -->
+
+  <!-- ==================== SECTION: PRODUCTS ==================== -->
+  <section id="products" class="section-products section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Product Catalog</span>
+        <h2>All DME Products</h2>
+        <p>Browse our full range of durable medical equipment. Click any product for details or add it directly to your quote cart.</p>
+      </div>
+
+      <div class="catalog-toolbar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="productSearch" placeholder="Search products..." aria-label="Search products" />
+        </div>
+        <div class="filter-tabs" id="filterTabs" role="tablist">
+          <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="filter-tab" data-filter="Wheelchairs" role="tab">Wheelchairs</button>
+          <button class="filter-tab" data-filter="Walkers" role="tab">Walkers</button>
+          <button class="filter-tab" data-filter="Beds &amp; Accessories" role="tab">Beds</button>
+          <button class="filter-tab" data-filter="Bathroom Safety" role="tab">Bath Safety</button>
+          <button class="filter-tab" data-filter="Lifts &amp; Transfers" role="tab">Lifts</button>
+          <button class="filter-tab" data-filter="Respiratory" role="tab">Respiratory</button>
+          <button class="filter-tab" data-filter="Monitoring" role="tab">Monitoring</button>
+          <button class="filter-tab" data-filter="Mobility Aids" role="tab">Mobility</button>
+          <button class="filter-tab" data-filter="Supplies" role="tab">Supplies</button>
+        </div>
+      </div>
+
+      <div class="product-grid" id="productGrid"></div>
+      <div class="no-results" id="noResults" style="display:none;">
+        <i class="fa-solid fa-box-open"></i>
+        <p>No products found. Try adjusting your search or filter.</p>
+      </div>
+    </div>
+  </section>
+  <!-- END SECTION: PRODUCTS -->
+
+  <!-- ==================== SECTION: ABOUT ==================== -->
+  <section id="about" class="section-about section-padding bg-light">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-img-placeholder">
+            <i class="fa-solid fa-snowflake"></i>
+            <span>Midnight Arctic Solutions LLC</span>
+          </div>
+          <div class="about-accent-card">
+            <i class="fa-solid fa-handshake"></i>
+            <p><strong>Patient-First Philosophy</strong><br/>Every product we distribute is selected with patient safety and care quality in mind.</p>
+          </div>
+        </div>
+        <div class="about-content">
+          <span class="section-eyebrow">About Us</span>
+          <h2>Your Partner in Durable Medical Equipment</h2>
+          <p class="about-lead">Midnight Arctic Solutions LLC was founded with a clear mission: to make quality durable medical equipment accessible, affordable, and reliably delivered to patients and healthcare providers alike.</p>
+          <p>As a licensed and insured DME distributor, we work with healthcare facilities, nursing homes, physical therapy centers, and individual patients to supply the equipment they need — when they need it. Our team brings years of industry experience in medical equipment distribution, compliance, and customer service.</p>
+          <p>We believe that getting the right equipment should be a smooth, transparent process — not a complicated ordeal. That's why our quote-first model removes the friction and lets you focus on what matters: patient care.</p>
+          <div class="about-values">
+            <div class="value-item">
+              <i class="fa-solid fa-star"></i>
+              <span><strong>Quality Focused</strong> — We only distribute equipment from reputable manufacturers that meets HCPCS standards.</span>
+            </div>
+            <div class="value-item">
+              <i class="fa-solid fa-balance-scale"></i>
+              <span><strong>Compliance Driven</strong> — We maintain all required state and federal licenses for DME distribution.</span>
+            </div>
+            <div class="value-item">
+              <i class="fa-solid fa-users"></i>
+              <span><strong>People First</strong> — Our team is here to support you through every step of the process.</span>
+            </div>
+          </div>
+          <a href="#contact" class="btn btn-primary">Contact Our Team <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- END SECTION: ABOUT -->
+
+  <!-- ==================== SECTION: CERTIFICATIONS ==================== -->
+  <section id="certifications" class="section-certs section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Credentials &amp; Compliance</span>
+        <h2>Licensed, Certified &amp; Compliant</h2>
+        <p>Transparency and compliance are central to everything we do. Below are the credentials and regulatory standards that Midnight Arctic Solutions LLC maintains.</p>
+      </div>
+      <div class="certs-grid">
+
+        <div class="cert-card">
+          <div class="cert-icon-wrap cert-icon--blue">
+            <i class="fa-solid fa-building"></i>
+          </div>
+          <h3>LLC Registration</h3>
+          <p>Midnight Arctic Solutions LLC is a legally registered limited liability company in the United States. Our business entity documents are on file with the appropriate state authority.</p>
+          <div class="cert-tag">Business Entity</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon-wrap cert-icon--green">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <h3>DMEPOS Supplier Enrollment</h3>
+          <p>Enrolled as a certified DMEPOS (Durable Medical Equipment, Prosthetics, Orthotics, and Supplies) supplier in compliance with CMS requirements. Supplier number available upon request.</p>
+          <div class="cert-tag">CMS Certified</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon-wrap cert-icon--blue">
+            <i class="fa-solid fa-notes-medical"></i>
+          </div>
+          <h3>Medicare &amp; Medicaid Authorization</h3>
+          <p>Authorized to serve Medicare and Medicaid beneficiaries. Our products carry appropriate HCPCS codes for billing purposes. Documentation available upon request.</p>
+          <div class="cert-tag">Medicare / Medicaid</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon-wrap cert-icon--orange">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h3>General Liability Insurance</h3>
+          <p>Fully insured with general liability coverage appropriate to the DME distribution industry. Certificates of insurance available for facilities requiring vendor documentation.</p>
+          <div class="cert-tag">Fully Insured</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon-wrap cert-icon--green">
+            <i class="fa-solid fa-building-columns"></i>
+          </div>
+          <h3>State Business License</h3>
+          <p>Holds a current, valid state business license. Operating in full compliance with applicable state regulations governing medical equipment distribution and sales.</p>
+          <div class="cert-tag">State Licensed</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon-wrap cert-icon--blue">
+            <i class="fa-solid fa-file-contract"></i>
+          </div>
+          <h3>HIPAA Awareness &amp; Privacy</h3>
+          <p>Our business practices are aligned with HIPAA awareness standards. Customer and patient information is handled with full confidentiality and care. No patient data is sold or shared.</p>
+          <div class="cert-tag">Privacy Compliant</div>
+        </div>
+
+      </div>
+
+      <div class="cert-footer-note">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>Copies of all licensing and certification documents are available upon request for facilities requiring vendor qualification. Please <a href="#contact">contact us</a> directly.</p>
+      </div>
+    </div>
+  </section>
+  <!-- END SECTION: CERTIFICATIONS -->
+
+  <!-- ==================== SECTION: FAQ ==================== -->
+  <section id="faq" class="section-faq section-padding bg-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">FAQ</span>
+        <h2>Frequently Asked Questions</h2>
+        <p>Have a question? Find quick answers below. Still need help? <a href="#contact">Contact us anytime.</a></p>
+      </div>
+      <div class="faq-list" id="faqList">
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Do you accept insurance or Medicare/Medicaid?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Midnight Arctic Solutions LLC is enrolled as an authorized DMEPOS supplier and can work with Medicare and Medicaid billing. We also work with many private insurance providers. Contact us with your insurance information and we will help determine coverage eligibility for the equipment you need.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>How does the quote request process work?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Simply browse our catalog, add the products you're interested in to your Quote Cart, then fill in your contact details and submit the request. A member of our team will review your request and respond within 1–2 business days with pricing, availability, and next steps. No payment is required at this stage.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Can individuals purchase DME, or only healthcare facilities?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We serve both individuals and healthcare organizations. Whether you're a patient, caregiver, home health agency, clinic, or facility, we can fulfill your DME needs. Just submit a quote request and indicate your situation in the notes field.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Do you deliver? What is the service area?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, delivery is available. Service area and delivery terms will be confirmed when we respond to your quote request. We can accommodate both local and remote orders — please include your delivery address in the notes when submitting your request.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>How quickly can I receive equipment after approval?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Fulfillment timelines vary by product and location. Once your quote is approved and your order is confirmed, our team will provide a specific estimated delivery window. We prioritize urgent medical equipment needs and will always communicate lead times clearly.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Do I need a prescription to order DME?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Some items require a physician's order for insurance billing purposes (e.g., power wheelchairs, hospital beds). Other items do not require a prescription for direct purchase. Our team will advise you on what documentation is needed based on the specific equipment and your payment/insurance method.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Can I request a product not listed in your catalog?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely. Our catalog represents our commonly stocked and distributed items, but we have access to a broader range of DME through our supplier network. Contact us directly with your specific equipment needs and we will do our best to source it for you.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Are your products FDA-cleared or medical-grade?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. All equipment we distribute is sourced from established medical equipment manufacturers and meets applicable FDA and medical-grade standards. We only work with products that carry appropriate regulatory clearances for their intended medical use.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- END SECTION: FAQ -->
+
+  <!-- ==================== SECTION: CONTACT ==================== -->
+  <section id="contact" class="section-contact section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Get in Touch</span>
+        <h2>Contact Midnight Arctic Solutions</h2>
+        <p>Have questions or need assistance? We're here to help. Reach out and a representative will respond promptly.</p>
+      </div>
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <h3>Contact Information</h3>
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+              <div>
+                <strong>Phone</strong>
+                <a href="tel:+15550000000">(555) 000-0000</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+              <div>
+                <strong>Email</strong>
+                <a href="mailto:info@midnightarcticsolutions.com">info@midnightarcticsolutions.com</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+              <div>
+                <strong>Address</strong>
+                <span>United States<br />(Full address upon inquiry)</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+              <div>
+                <strong>Business Hours</strong>
+                <span>Mon–Fri: 9:00 AM – 5:00 PM EST<br />Sat–Sun: Closed</span>
+              </div>
+            </div>
+          </div>
+          <div class="contact-social">
+            <a href="#" aria-label="Facebook" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="LinkedIn" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap">
+          <h3>Send a Message</h3>
+          <form id="contactForm" novalidate>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="cName">Full Name <span class="req">*</span></label>
+                <input type="text" id="cName" name="name" placeholder="John Smith" required />
+                <span class="field-error" id="cNameErr"></span>
+              </div>
+              <div class="form-group">
+                <label for="cEmail">Email <span class="req">*</span></label>
+                <input type="email" id="cEmail" name="email" placeholder="john@example.com" required />
+                <span class="field-error" id="cEmailErr"></span>
+              </div>
+              <div class="form-group">
+                <label for="cPhone">Phone</label>
+                <input type="tel" id="cPhone" name="phone" placeholder="(555) 000-0000" />
+              </div>
+              <div class="form-group">
+                <label for="cSubject">Subject <span class="req">*</span></label>
+                <select id="cSubject" name="subject" required>
+                  <option value="">Select a subject</option>
+                  <option>Product Inquiry</option>
+                  <option>Quote Request</option>
+                  <option>Insurance / Billing</option>
+                  <option>Credentials / Vendor Docs</option>
+                  <option>General Question</option>
+                  <option>Other</option>
+                </select>
+                <span class="field-error" id="cSubjectErr"></span>
+              </div>
+              <div class="form-group form-group--full">
+                <label for="cMessage">Message <span class="req">*</span></label>
+                <textarea id="cMessage" name="message" rows="5" placeholder="How can we help you?" required></textarea>
+                <span class="field-error" id="cMessageErr"></span>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fa-solid fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- END SECTION: CONTACT -->
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="footer-main">
+    <div class="container footer-grid">
+
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="logo-mark logo-mark--sm"><i class="fa-solid fa-snowflake"></i></div>
+          <div class="logo-text">
+            <span class="logo-name">Midnight Arctic</span>
+            <span class="logo-tagline">Solutions LLC</span>
+          </div>
+        </div>
+        <p class="footer-desc">Licensed DME supplier and distributor serving healthcare facilities and individuals. Quality equipment, transparent pricing, and dependable service.</p>
+        <div class="footer-badges">
+          <span class="footer-badge"><i class="fa-solid fa-id-card"></i> DMEPOS Supplier</span>
+          <span class="footer-badge"><i class="fa-solid fa-shield-halved"></i> Fully Insured</span>
+        </div>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#certifications">Certifications</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Product Categories</h4>
+        <ul>
+          <li><a href="#products">Wheelchairs</a></li>
+          <li><a href="#products">Walkers &amp; Mobility</a></li>
+          <li><a href="#products">Hospital Beds</a></li>
+          <li><a href="#products">Bathroom Safety</a></li>
+          <li><a href="#products">Patient Lifts</a></li>
+          <li><a href="#products">Respiratory Equipment</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact-col">
+        <h4>Contact</h4>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-phone"></i>
+          <a href="tel:+15550000000">(555) 000-0000</a>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <a href="mailto:info@midnightarcticsolutions.com">info@midnightarcticsolutions.com</a>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fa-solid fa-clock"></i>
+          <span>Mon–Fri: 9 AM – 5 PM EST</span>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>&copy; <span id="footerYear"></span> Midnight Arctic Solutions LLC. All rights reserved.</p>
+      <p class="footer-legal">This site is for product information and quote requests only. No online payment is processed. &nbsp;|&nbsp; <a href="#certifications">Licenses &amp; Credentials</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     CHAT WIDGET
+     ============================================================ -->
+<div class="chat-widget" id="chatWidget" aria-label="Live chat">
+  <div class="chat-window" id="chatWindow" aria-hidden="true">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar"><i class="fa-solid fa-user-nurse"></i></div>
+        <div>
+          <strong>Midnight Arctic Support</strong>
+          <span class="chat-status"><i class="fa-solid fa-circle"></i> Typically replies within a day</span>
+        </div>
+      </div>
+      <button class="chat-minimize" id="chatMinimize" aria-label="Minimize chat"><i class="fa-solid fa-minus"></i></button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg chat-msg--bot">
+        <div class="chat-bubble">
+          <p>Hello! Welcome to <strong>Midnight Arctic Solutions LLC</strong>.</p>
+          <p>I'm here to help you with product questions, quote requests, or any general inquiries. How can I assist you today?</p>
+        </div>
+        <span class="chat-time">Now</span>
+      </div>
+      <div class="chat-quick-replies" id="quickReplies">
+        <button class="quick-reply" data-msg="I'd like to learn about your products">Browse Products</button>
+        <button class="quick-reply" data-msg="How do I request a quote?">Request a Quote</button>
+        <button class="quick-reply" data-msg="Do you accept Medicare?">Insurance Info</button>
+        <button class="quick-reply" data-msg="I need to speak with someone">Contact Team</button>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Type a message..." aria-label="Chat message" maxlength="500" />
+      <button class="chat-send" id="chatSend" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+  <button class="chat-toggle" id="chatToggle" aria-label="Open chat" aria-expanded="false">
+    <i class="fa-solid fa-comment-dots chat-icon-open"></i>
+    <i class="fa-solid fa-xmark chat-icon-close"></i>
+    <span class="chat-unread" id="chatUnread">1</span>
+  </button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
